@@ -1,10 +1,11 @@
 var io = require("./io.js");
-const admin = require("./admin.json");
+const admin = require("../json/admin.json");
+var raidFile = "../json/raids.json";
 
 var client;
 var raids = [];
 var nextRaidId = 0;
-var raidFile = "raids.json";
+
 
 exports.initialize = function(c) {
 	client = c;

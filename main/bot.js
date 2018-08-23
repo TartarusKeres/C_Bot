@@ -1,33 +1,27 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 
-const auth = require("./auth.json");
-var c = require("./cmds.js");
-var io = require("./io.js");
-var pchk = require("./population.js");
-var fileCmds = "cmds.json";
-var rm = require("./raidman.js");
-var trck = require("./trickster.js");
+const auth = require("./json/auth.json");
+var fileCmds = "json/cmds.json";
 
-//Last trickster chest 08/19/2018 2:30pm
-
-c.funcArgs.cmds = io.readFile(fileCmds);
+var c = require("./modules/cmds.js");
+var io = require("./modules/io.js");
+var pchk = require("./modules/population.js");
+var rm = require("./modules/raidman.js");
+var trck = require("./modules/trickster.js");
 
 client.on("ready", () => {
 	console.log("I am ready!");
 	
-	/*var users = client.users.array();
-	for(var i=0;i<users.length;i++) {
-		if(users[i].presence.game) {
-			if(users[i].presence.game.name=="OrbusVR") {
-				console.log(users[i].username);
-			}
-		}
-	}*/
-	
+	// Initialize command manager
+	c.funcArgs.cmds = io.readFile(fileCmds);
+	// Initialize raid manager
 	rm.initialize(client);
+	// Reset allow send on population manager to allow in 30 mintues
 	setTimeout(function(){pchk.resetAllowSend()}, 1800000);
+	// Start population manager
 	pchk.checkPopulation(client);
+	// Initialize trickster manager
 	trck.initialize(client);
 });
 
