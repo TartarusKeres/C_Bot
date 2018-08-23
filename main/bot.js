@@ -1,14 +1,14 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 
-const auth = require("./json/auth.json");
-var fileCmds = "json/cmds.json";
+const auth = require(__dirname+"/json/auth.json");
+var fileCmds = __dirname+"/json/cmds.json";
 
-var c = require("./modules/cmds.js");
-var io = require("./modules/io.js");
-var pchk = require("./modules/population.js");
-var rm = require("./modules/raidman.js");
-var trck = require("./modules/trickster.js");
+var c = require(__dirname+"/modules/cmds.js");
+var io = require(__dirname+"/modules/io.js");
+var pchk = require(__dirname+"/modules/population.js");
+var rm = require(__dirname+"/modules/raidman.js");
+var trck = require(__dirname+"/modules/trickster.js");
 
 client.on("ready", () => {
 	console.log("I am ready!");

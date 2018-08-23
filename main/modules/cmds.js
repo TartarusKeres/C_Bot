@@ -1,8 +1,8 @@
-var o = require("./orbus.js");
-var io = require("./io.js");
-var rm = require("./raidman.js");
-var tr = require("./trickster.js");
-var fileCmds = "../json/cmds.json";
+var o = require(__dirname+"/orbus.js");
+var io = require(__dirname+"/io.js");
+var rm = require(__dirname+"/raidman.js");
+var tr = require(__dirname+"/trickster.js");
+var fileCmds = __dirname+"/../json/cmds.json";
 
 exports.funcArgs = 
 {

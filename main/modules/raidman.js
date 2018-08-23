@@ -1,6 +1,7 @@
-var io = require("./io.js");
-const admin = require("../json/admin.json");
-var raidFile = "../json/raids.json";
+console.log(__dirname);
+var io = require(__dirname+"/io.js");
+const admin = require(__dirname+"/../json/admin.json");
+var raidFile = __dirname+"/../json/raids.json";
 
 var client;
 var raids = [];
