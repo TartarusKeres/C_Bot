@@ -2,7 +2,7 @@ var o = require("./orbus.js");
 var io = require("./io.js");
 var rm = require("./raidman.js");
 var tr = require("./trickster.js");
-var fileCmds = "../json/cmds.json";
+var fileCmds = "./json/cmds.json";
 
 exports.funcArgs = 
 {
