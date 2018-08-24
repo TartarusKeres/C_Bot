@@ -49,13 +49,11 @@ client.on("message", (message) => {
 		
 			var tcmd = c.funcArgs.args[0];
 			if(tcmd==null || tcmd=="") {
-				//c.funcArgs.cmd = c.funcArgs.cmds.find(function (cmd) { return cmd["name"] === "help"; });
 				message.channel.send("Invalid command. Please use $help to recieve a PM of commands and their descriptions.");
 			} else {
 				c.funcArgs.args = c.funcArgs.args.splice(1);
 				c.funcArgs.cmd = c.funcArgs.cmds.find(function (cmd) { return cmd["name"].toUpperCase() === tcmd.toUpperCase(); });
 				if(c.funcArgs.cmd==null) {
-					//c.funcArgs.cmd = c.funcArgs.cmds.find(function (cmd) { return cmd["name"] === "help"; });
 					message.channel.send("Invalid command. Please use $help to recieve a PM of commands and their descriptions.");
 				} else {
 					c.funcArgs.message = message;
@@ -64,6 +62,12 @@ client.on("message", (message) => {
 			}
 		}
      }
+});
+
+client.on("messageReactionAdd", (reaction, user) => {
+        if(reaction.message.author==client.user) {
+			rm.parseResponse(reaction._emoji.name, reaction.message);
+		}
 });
 
 client.login(auth.token);

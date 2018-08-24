@@ -175,29 +175,30 @@ exports.parseCommand = function(funcArgs) {
 	message.channel.send(response);
 }
 
-exports.parseResponse = function(message) {
-	if(message.author!==client.user) {
-		if(message.content=="tank" || message.content=="heal" || message.content=="dps") {
-			message.channel.fetchMessages({ limit: 10 })
-				.then(function(messages) {
-					var found = false;
-					for(var i=0;i<messages.array().length;i++) {
-						var identifier = messages.array()[i].content.substring(0,9);
-						if(identifier=="Raid ID: ") {
-							var raidId = messages.array()[i].content.substring(9).substring(0,messages.array()[i].content.substring(9).indexOf(" "));
-							message.channel.send(addRaid(parseInt(raidId), u(message.author.id), message.content));
-							found = true;
-							break;
-						}
-					}
-					if(!found) {
-						message.channel.send("Could not find a Raid ID in chat history that you were invited to!");
-					}
-				})
-				.catch(console.error);
-		} else {
-			message.channel.send("Please respond with one of the following:\ntank\nheal\ndps");
+exports.parseResponse = function(emoji, message) {
+	if(emoji=="🛡" || emoji=="🚑" || emoji=="⚔") {
+		var signupClass = "";
+		switch(emoji) {
+			case "🛡":
+				signupClass = "tank";
+				break;
+			case "🚑":
+				signupClass = "heal";
+				break;
+			case "⚔":
+				signupClass = "dps";
+				break;
 		}
+		}
+		var identifier = messages.array()[i].content.substring(0,9);
+		if(identifier=="Raid ID: ") {
+			var raidId = messages.array()[i].content.substring(9).substring(0,messages.array()[i].content.substring(9).indexOf(" "));
+			message.channel.send(addRaid(parseInt(raidId), u(message.author.id), signupClass));
+		} else {
+			message.channel.send("Could not find Raid ID! Please make sure you are reacting to the raid posting.");
+		}
+	} else {
+		message.channel.send("Please react to the posting with one of the following:\n🛡 (:shield:) for Tank\n🚑 (:ambulance:) for Heal\n⚔ (:crossed_swords:) for DPS");
 	}
 }
 
