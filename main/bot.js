@@ -31,7 +31,7 @@ client.on("error", (err) => {
 
 client.on("message", (message) => {
 	if(message.guild === null) {
-		rm.parseResponse(message);
+		//rm.parseResponse(message);
 	} else {
 		var identifier = "$";
 		if (message.content.substring(0, identifier.length) == identifier) {
@@ -66,7 +66,7 @@ client.on("message", (message) => {
 
 client.on("messageReactionAdd", (reaction, user) => {
         if(reaction.message.author==client.user) {
-			rm.parseResponse(reaction._emoji.name, reaction.message);
+			rm.parseResponse(user, reaction._emoji.name, reaction.message);
 		}
 });
 

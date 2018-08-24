@@ -175,7 +175,7 @@ exports.parseCommand = function(funcArgs) {
 	message.channel.send(response);
 }
 
-exports.parseResponse = function(emoji, message) {
+exports.parseResponse = function(user, emoji, message) {
 	if(emoji=="🛡" || emoji=="🚑" || emoji=="⚔") {
 		var signupClass = "";
 		switch(emoji) {
@@ -189,15 +189,15 @@ exports.parseResponse = function(emoji, message) {
 				signupClass = "dps";
 				break;
 		}
-		var identifier = messages.array()[i].content.substring(0,9);
+		var identifier = message.content.substring(0,9);
 		if(identifier=="Raid ID: ") {
-			var raidId = messages.array()[i].content.substring(9).substring(0,messages.array()[i].content.substring(9).indexOf(" "));
-			message.channel.send(addRaid(parseInt(raidId), u(message.author.id), signupClass));
+			var raidId = message.content.substring(9).substring(0,message.content.substring(9).indexOf(" "));
+			message.channel.send(addRaid(parseInt(raidId), u(user.id), signupClass));
 		} else {
 			message.channel.send("Could not find Raid ID! Please make sure you are reacting to the raid posting.");
 		}
 	} else {
-		message.channel.send("Please react to the posting with one of the following:\n🛡 (:shield:) for Tank\n🚑 (:ambulance:) for Heal\n⚔ (:crossed_swords:) for DPS");
+		message.channel.send("Please react to the posting with one of the following:\n🛡 (shield) for Tank\n🚑 (ambulance) for Heal\n⚔ (crossed_swords) for DPS");
 	}
 }
 
@@ -392,21 +392,17 @@ function raidSignup(id, message) {
 	var cr = raids.find(function(e){return e.raidId==id});
 	var raidCh = client.guilds.find(function(e){return e.name=="Carnage";}).channels.find(function(e){return e.name=="hard-raids";});
 	var users = raidCh.members.array();
-	/*var msgUsers = "```";
-	for(var i=0;i<users.length;i++) {
-		msgUsers += u(users[i].user.id).username + "\n";
-	}
-	msgUsers += "```";*/
 	var pmMsg = 
 		"Raid ID: " + cr.raidId + " Name: " + cr.raidName + " signup has been started!" +
-		"\n\nPlease respond with one of the following words to signup:" +
-		"\ntank" +
-		"\nheal" +
-		"\ndps";
+		"\n\nPlease react to this posting with one of the following:" +
+		"\n🛡 (shield) for Tank" +
+		"\n🚑 (ambulance) for Heal" +
+		"\n⚔ (crossed_swords) for DPS";
 		
 	for(var i=0;i<users.length;i++) {
 		users[i].user.send(pmMsg);
 	}
+	//client.users.get("208439694508163072").send(pmMsg);
 	
 	return "Signup sent for Raid ID " + cr.raidId + " Name: " + cr.raidName + "!";
 }
