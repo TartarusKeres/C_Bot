@@ -1,4 +1,3 @@
-console.log(__dirname);
 var io = require(__dirname+"/io.js");
 const admin = require(__dirname+"/../json/admin.json");
 var raidFile = __dirname+"/../json/raids.json";

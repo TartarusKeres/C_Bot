@@ -21,7 +21,7 @@ exports.help = function() {
 			"\nDescription: " + exports.funcArgs.cmds[i]["description"];
 	}
 	helpText += "```";
-	exports.funcArgs.message.channel.send(helpText);
+	exports.funcArgs.message.author.send(helpText);
 }
 
 exports.player = function() {

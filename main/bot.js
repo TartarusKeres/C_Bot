@@ -49,14 +49,17 @@ client.on("message", (message) => {
 		
 			var tcmd = c.funcArgs.args[0];
 			if(tcmd==null || tcmd=="") {
-				c.funcArgs.cmd = c.funcArgs.cmds.find(function (cmd) { return cmd["name"] === "help"; });
+				//c.funcArgs.cmd = c.funcArgs.cmds.find(function (cmd) { return cmd["name"] === "help"; });
+				message.channel.send("Invalid command. Please use $help to recieve a PM of commands and their descriptions.");
 			} else {
 				c.funcArgs.args = c.funcArgs.args.splice(1);
 				c.funcArgs.cmd = c.funcArgs.cmds.find(function (cmd) { return cmd["name"].toUpperCase() === tcmd.toUpperCase(); });
-				c.funcArgs.message = message;
-				eval("c." + c.funcArgs.cmd["cmd"]);
 				if(c.funcArgs.cmd==null) {
-					c.funcArgs.cmd = c.funcArgs.cmds.find(function (cmd) { return cmd["name"] === "help"; });
+					//c.funcArgs.cmd = c.funcArgs.cmds.find(function (cmd) { return cmd["name"] === "help"; });
+					message.channel.send("Invalid command. Please use $help to recieve a PM of commands and their descriptions.");
+				} else {
+					c.funcArgs.message = message;
+					eval("c." + c.funcArgs.cmd["cmd"]);
 				}
 			}
 		}
