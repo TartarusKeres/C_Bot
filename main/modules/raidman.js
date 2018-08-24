@@ -189,7 +189,6 @@ exports.parseResponse = function(emoji, message) {
 				signupClass = "dps";
 				break;
 		}
-		}
 		var identifier = messages.array()[i].content.substring(0,9);
 		if(identifier=="Raid ID: ") {
 			var raidId = messages.array()[i].content.substring(9).substring(0,messages.array()[i].content.substring(9).indexOf(" "));
