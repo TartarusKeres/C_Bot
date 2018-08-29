@@ -389,7 +389,7 @@ function raidReminder(id) {
 	var cr = raids.find(function(e){return e.raidId==id});
 	if(cr) {
 		var rrd = new Date(cr.raidDate);
-		rrd.setHours(9);
+		rrd.setHours(21);
 		rrd.setMinutes(30);
 		for(var i=0;i<cr.tank.length;i++) {
 			var user = client.users.array().find(function(e){return e.id==cr.tank[i].id;})
@@ -420,13 +420,13 @@ function setRaidReminder(cr) {
 		raidReminder(cr.raidId);
 	});
 	rrd = new Date(cr.raidDate);
-	rrd.setHours(9);
+	rrd.setHours(21);
 	s.scheduleJob(dh.getCron(rrd), function(){
 		raidReminder(cr.raidId);
 	});
 	rrd = new Date(cr.raidDate);
 	rrd.setHours(13);
-	rrd.setMinutes(35);
+	rrd.setMinutes(40);
 	s.scheduleJob(dh.getCron(rrd), function(){
 		raidReminder(cr.raidId);
 	});
