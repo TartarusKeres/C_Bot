@@ -46,7 +46,7 @@ client.on("message", (message) => {
 				}
 				return  p;
 			}, {a: ['']}).a;
-		
+			
 			var tcmd = c.funcArgs.args[0];
 			if(tcmd==null || tcmd=="") {
 				message.channel.send("Invalid command. Please use $help to recieve a PM of commands and their descriptions.");
@@ -66,6 +66,7 @@ client.on("message", (message) => {
 
 client.on("messageReactionAdd", (reaction, user) => {
         if(reaction.message.author==client.user) {
+			console.log(reaction._emoji.name);
 			rm.parseResponse(user, reaction._emoji.name, reaction.message);
 		}
 });

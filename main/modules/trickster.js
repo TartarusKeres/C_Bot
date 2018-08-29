@@ -1,4 +1,4 @@
-var s = require('node-schedule');
+var dh = require(__dirname+"/datehelper.js");
 var j;
 var nextTrickster;
 var client;
@@ -14,11 +14,7 @@ exports.getNextTrickster = function() {
 		tricksterSeed.setHours(tricksterSeed.getHours()+10);
 	}
 	nextTrickster = tricksterSeed;
-	var diff = nextTrickster - new Date();
-	var rawHours = diff / (1000*60*60);
-	var hours = Math.trunc(rawHours);
-	var min = Math.trunc((rawHours-hours)*60);
-	return "Next trickster chest will spawn in " + hours + " hour(s) and " + min + " minute(s)\n" + nextTrickster;
+	return "Next trickster chest will spawn in " + dh.toHoursFull(nextTrickster) + "\n" + nextTrickster;
 }
 
 function updateTricksterField() {
@@ -27,15 +23,6 @@ function updateTricksterField() {
 		tricksterSeed.setHours(tricksterSeed.getHours()+10);
 	}
 	nextTrickster = tricksterSeed;
-	var diff = nextTrickster - new Date();
-	var rawHours = diff / (1000*60*60);
-	var hours = Math.trunc(rawHours);
-	var min = Math.trunc((rawHours-hours)*60);
-	client.guilds.find(function(e){return e.name=="Carnage";}).channels.find(function(e){return e.id=="481830068973338624";}).setName("trickster in " + hours + "h" + min + "m")
+	client.guilds.find(function(e){return e.name=="Carnage";}).channels.find(function(e){return e.id=="481830068973338624";}).setName("trickster in " + dh.toHours(nextTrickster))
 	setTimeout(updateTricksterField, 60000);
-}
-
-Number.prototype.pad = function(size) {
-  var sign = Math.sign(this) === -1 ? '-' : '';
-  return sign + new Array(size).concat([Math.abs(this)]).join('0').slice(-size);
 }

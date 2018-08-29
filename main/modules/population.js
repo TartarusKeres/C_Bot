@@ -1,4 +1,5 @@
 var o = require("./orbus.js");
+var dh = require(__dirname+"/datehelper.js");
 var lastPop, currPop, lastSent = "";
 var allowSend = false;
 
@@ -21,17 +22,11 @@ exports.checkPopulation = function(c) {
 		c.user.setActivity("OrbPop: " + jRes["playersOnline"] + " Time: " + jRes["time"] + " " + timeClass, { type: "PLAYING" });
 		
 		if(currPop!==lastPop) {
-			var currentDate = new Date();
-			var d = currentDate.getDate();
-			var m = currentDate.getMonth(); 
-			var y = currentDate.getFullYear();
-			var h = currentDate.getHours();
-			var mm = currentDate.getMinutes();
 			/*c.guilds.find(function(e){return e.name=="Carnage";}).channels.find(function(e){return e.name=="bot-test-channel";}).send(
 				"```" +
 				"Population is '" + currPop + "'" +
 				"\nPlayers Online: " + jRes["playersOnline"] +
-				"\n"+y+"-"+m.pad(2)+"-"+d.pad(2)+" "+h.pad(2)+":"+mm.pad(2)+
+				"\n"+dh.getDateTime()+
 				"```"
 			);*/
 		}
@@ -44,18 +39,12 @@ exports.checkPopulation = function(c) {
 				} else if(currPop=="Very High") {
 					msg = "It's recruiting time! Make Troy proud!";
 				}
-				var currentDate = new Date();
-				var d = currentDate.getDate();
-				var m = currentDate.getMonth(); 
-				var y = currentDate.getFullYear();
-				var h = currentDate.getHours();
-				var mm = currentDate.getMinutes();
 				c.guilds.find(function(e){return e.name=="Carnage";}).channels.find(function(e){return e.name=="population";}).send(
 					"```" +
 					msg +
 					"\n\nPopulation is '" + currPop + "'" +
 					"\nPlayers Online: " + jRes["playersOnline"] +
-					"\n"+y+"-"+m.pad(2)+"-"+d.pad(2)+" "+h.pad(2)+":"+mm.pad(2)+
+					"\n"+dh.getDateTime()+
 					"```"
 				);
 				allowSend = false;
@@ -72,9 +61,4 @@ exports.checkPopulation = function(c) {
 
 exports.resetAllowSend = function() {
 	allowSend = true;
-}
-
-Number.prototype.pad = function(size) {
-  var sign = Math.sign(this) === -1 ? '-' : '';
-  return sign + new Array(size).concat([Math.abs(this)]).join('0').slice(-size);
 }
