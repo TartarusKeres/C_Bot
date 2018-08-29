@@ -1,16 +1,20 @@
 exports.toHours = function(d) {
-	var diff = d - new Date();
+	var cd = new Date();
+	cd.setSeconds(0);
+	var diff = d - cd;
 	var rawHours = diff / (1000*60*60);
 	var hours = Math.trunc(rawHours);
-	var min = Math.trunc((rawHours-hours)*60);
+	var min = Math.trunc((rawHours-hours)*60)+1;
 	return hours + "h" + min + "m";
 }
 
 exports.toHoursFull = function(d) {
-	var diff = d - new Date();
+	var cd = new Date();
+	cd.setSeconds(0);
+	var diff = d - cd;
 	var rawHours = diff / (1000*60*60);
 	var hours = Math.trunc(rawHours);
-	var min = Math.trunc((rawHours-hours)*60);
+	var min = Math.trunc((rawHours-hours)*60)+1;
 	return hours + " hour(s) and " + min + " minute(s)";
 }
 
@@ -36,7 +40,7 @@ exports.getCron = function(cd) {
 	var m = cd.getMonth(); 
 	var h = cd.getHours();
 	var mm = cd.getMinutes();
-	return mm+" "+h+" "+d+" "+(m+1)+" *";
+	return "1 "+mm+" "+h+" "+d+" "+(m+1)+" *";
 }
 
 Number.prototype.pad = function(size) {

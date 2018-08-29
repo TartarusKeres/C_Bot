@@ -393,19 +393,19 @@ function raidReminder(id) {
 		rrd.setMinutes(30);
 		for(var i=0;i<cr.tank.length;i++) {
 			var user = client.users.array().find(function(e){return e.id==cr.tank[i].id;})
-			user.send("Raid ID: " + cr.raidId + " Date: " + dh.toDate(new Date(cr.raidDate)) + " Name: " + cr.raidName + " will be starting in" + dh.toHoursFull(rrd) + "!");
+			user.send("Raid ID: " + cr.raidId + " Date: " + dh.toDate(new Date(cr.raidDate)) + " Name: " + cr.raidName + " will be starting in " + dh.toHoursFull(rrd) + "!");
 		}
 		for(var i=0;i<cr.heal.length;i++) {
 			var user = client.users.array().find(function(e){return e.id==cr.heal[i].id;})
-			user.send("Raid ID: " + cr.raidId + " Date: " + dh.toDate(new Date(cr.raidDate)) + " Name: " + cr.raidName + " will be starting in" + dh.toHoursFull(rrd) + "!");
+			user.send("Raid ID: " + cr.raidId + " Date: " + dh.toDate(new Date(cr.raidDate)) + " Name: " + cr.raidName + " will be starting in " + dh.toHoursFull(rrd) + "!");
 		}
 		for(var i=0;i<cr.dps.length;i++) {
 			var user = client.users.array().find(function(e){return e.id==cr.dps[i].id;})
-			user.send("Raid ID: " + cr.raidId + " Date: " + dh.toDate(new Date(cr.raidDate)) + " Name: " + cr.raidName + " will be starting in" + dh.toHoursFull(rrd) + "!");
+			user.send("Raid ID: " + cr.raidId + " Date: " + dh.toDate(new Date(cr.raidDate)) + " Name: " + cr.raidName + " will be starting in " + dh.toHoursFull(rrd) + "!");
 		}
 		for(var i=0;i<cr.reserve.length;i++) {
 			var user = client.users.array().find(function(e){return e.id==cr.reserve[i].id;})
-			user.send("Raid ID: " + cr.raidId + " Date: " + dh.toDate(new Date(cr.raidDate)) + " Name: " + cr.raidName + " will be starting in" + dh.toHoursFull(rrd) + "!");
+			user.send("Raid ID: " + cr.raidId + " Date: " + dh.toDate(new Date(cr.raidDate)) + " Name: " + cr.raidName + " will be starting in " + dh.toHoursFull(rrd) + "!");
 		}
 		return "Reminder sent for Raid ID " + cr.raidId + " Date: " + dh.toDate(new Date(cr.raidDate)) + " Name: " + cr.raidName + "!";
 	} else {
@@ -424,12 +424,12 @@ function setRaidReminder(cr) {
 	s.scheduleJob(dh.getCron(rrd), function(){
 		raidReminder(cr.raidId);
 	});
-	rrd = new Date(cr.raidDate);
-	rrd.setHours(13);
-	rrd.setMinutes(40);
+	/*rrd = new Date(cr.raidDate);
+	rrd.setHours(14);
+	rrd.setMinutes(10);
 	s.scheduleJob(dh.getCron(rrd), function(){
 		raidReminder(cr.raidId);
-	});
+	});*/
 }
 
 function raidSignup(id, message, raidType) {
@@ -453,10 +453,10 @@ function raidSignup(id, message, raidType) {
 		"\n❓ (question) for Reserve" +
 		"\n\n__***IF YOU ARE UNSURE ABOUT WHETHER YOU CAN MAKE IT,\nDO NOT WASTE A SLOT SOMEONE ELSE\nCAN FILL AND INSTEAD SIGNUP FOR RESERVE***__";
 		
-	/*for(var i=0;i<users.length;i++) {
+	for(var i=0;i<users.length;i++) {
 		users[i].user.send(pmMsg);
-	}*/
-	client.users.get("208439694508163072").send(pmMsg);
+	}
+	//client.users.get("208439694508163072").send(pmMsg);
 	
 	return "Signup sent for Raid ID " + cr.raidId + " Date: " + dh.toDate(new Date(cr.raidDate)) + " Name: " + cr.raidName + "!";
 }
