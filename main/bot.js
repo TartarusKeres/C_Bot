@@ -25,6 +25,25 @@ client.on("ready", () => {
 	trck.initialize(client);
 });
 
+/*function getAllMessages(pch) {
+	pch.fetchMessages({limit: 1})
+		.then(function(msgs){
+			var lastId = msgs.lastKey();
+			if(lastId) {
+				var count = 0;
+				(function getAllMessagesLoop(ch, id) {
+					ch.fetchMessages({limit: 100, before: id})
+					.then(function(msgs){
+						lastId = msgs.lastKey();
+						count += msgs.size;
+					})
+					.then(()=>{if(lastId) {console.log(`${lastId} => ${count}`); getAllMessagesLoop(ch, lastId);} else {console.log(`${count}`);}})
+					.catch(console.error);
+				})(pch, lastId);
+			}
+		})
+}*/
+
 client.on("error", (err) => {
   console.error(err);
 });
@@ -37,15 +56,15 @@ client.on("message", (message) => {
 		if (message.content.substring(0, identifier.length) == identifier) {
 			c.funcArgs.args =
 			message.content.substring(identifier.length).match(/\\?.|^$/g).reduce((p, q) => {
-				if(q === '"'){
+				if(q === ""){
 					p.quote ^= 1;
-				}else if(!p.quote && q === ' '){
-					p.a.push('');
+				}else if(!p.quote && q === " "){
+					p.a.push("");
 				}else{
 					p.a[p.a.length-1] += q.replace(/\\(.)/,"$1");
 				}
 				return  p;
-			}, {a: ['']}).a;
+			}, {a: [""]}).a;
 			
 			var tcmd = c.funcArgs.args[0];
 			if(tcmd==null || tcmd=="") {
@@ -65,10 +84,11 @@ client.on("message", (message) => {
 });
 
 client.on("messageReactionAdd", (reaction, user) => {
-        if(reaction.message.author==client.user) {
-			console.log(reaction._emoji.name);
-			rm.parseResponse(user, reaction._emoji.name, reaction.message);
-		}
+	console.log("React!");
+	if(reaction.message.author==client.user && reaction.message.guild === null) {
+		//console.log(reaction._emoji.name);
+		rm.parseResponse(user, reaction._emoji.name, reaction.message);
+	}
 });
 
 client.login(auth.token);

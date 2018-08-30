@@ -195,12 +195,21 @@ exports.parseResponse = function(user, emoji, message) {
 				signupClass = "reserve";
 				break;
 		}
-		var identifier = message.content.substring(0,9);
-		if(identifier=="Raid ID: ") {
-			var raidId = message.content.substring(9).substring(0,message.content.substring(9).indexOf(" "));
+		
+		var raidId = "";
+		for(var i=0;i<raids.length;i++) {
+			for(var j=0;j<raids[i].signupMsgs.length;j++) {
+				if(message.id==raids[i].signupMsgs[j]) {
+					raidId = raids[i].raidId;
+					break;
+				}
+			}
+		}
+		
+		if(raidId!=="") {
 			message.channel.send(addRaid(parseInt(raidId), u(user.id), signupClass));
 		} else {
-			message.channel.send("Could not find Raid ID! Please make sure you are reacting to the raid posting.");
+			message.channel.send("This message is not a valid raid posting!\nPlease make sure you are reacting to a raid posting.\nIt is possible that the raid has been deleted and is no longer valid.");
 		}
 	} else {
 		message.channel.send("Please react to the posting with one of the following:\n🛡 (shield) for Tank\n🚑 (ambulance) for Heal\n⚔ (crossed_swords) for DPS\n❓ (question) for Reserve");
@@ -222,7 +231,8 @@ function createRaid(dt, n, t, h, d, r) {
 				tank: [],
 				heal: [],
 				dps: [],
-				reserve: []
+				reserve: [],
+				signupMsgs: []
 			};
 			raids.push(raid);
 			setRaidReminder(raid);
@@ -435,15 +445,7 @@ function setRaidReminder(cr) {
 function raidSignup(id, message, raidType) {
 	var client = message.client;
 	var cr = raids.find(function(e){return e.raidId==id});
-	var raidCh;
-	if(raidType.toUpperCase()=="NORMAL") {
-		raidCh = client.guilds.find(function(e){return e.name=="Carnage";}).channels.find(function(e){return e.name=="carnage";});
-	} else if(raidType.toUpperCase()=="HARD") {
-		raidCh = client.guilds.find(function(e){return e.name=="Carnage";}).channels.find(function(e){return e.name=="hard-raids";});
-	} else {
-		return "Invalid raid type supplied! Please use normal or hard!\nSyntax for signup is: $raid signup <Raid ID> <normal|hard>";
-	}
-	var users = raidCh.members.array();
+	
 	var pmMsg = 
 		"Raid ID: " + cr.raidId + " Date: " + dh.toDate(new Date(cr.raidDate)) + " Name: " + cr.raidName + " signup has been started!" +
 		"\n\nPlease react to this posting with one of the following:" +
@@ -452,11 +454,33 @@ function raidSignup(id, message, raidType) {
 		"\n⚔ (crossed_swords) for DPS" +
 		"\n❓ (question) for Reserve" +
 		"\n\n__***IF YOU ARE UNSURE ABOUT WHETHER YOU CAN MAKE IT,\nDO NOT WASTE A SLOT SOMEONE ELSE\nCAN FILL AND INSTEAD SIGNUP FOR RESERVE***__";
-		
-	for(var i=0;i<users.length;i++) {
-		users[i].user.send(pmMsg);
+	
+	var raidCh;
+	if(raidType.toUpperCase()=="NORMAL") {
+		raidCh = client.guilds.find(function(e){return e.name=="Carnage";}).channels.find(function(e){return e.name=="carnage";});
+	} else if(raidType.toUpperCase()=="HARD") {
+		raidCh = client.guilds.find(function(e){return e.name=="Carnage";}).channels.find(function(e){return e.name=="hard-raids";});
+	} else if(raidType.toUpperCase()=="TEST") {
+		raidCh = client.guilds.find(function(e){return e.name=="Carnage";}).channels.find(function(e){return e.name=="bot-test-channel";});
+	} else if(raidType.toUpperCase()=="SELFTEST") {
+		client.users.get("208439694508163072").send(pmMsg)
+		.then(msg => {
+			cr.signupMsgs.push(msg.id);
+			io.writeFile(raidFile, raids);
+		});
+		return "Self Test for Raid ID " + cr.raidId + " Date: " + dh.toDate(new Date(cr.raidDate)) + " Name: " + cr.raidName + "!";
+	} else {
+		return "Invalid raid type supplied! Please use normal or hard!\nSyntax for signup is: $raid signup <Raid ID> <normal|hard>";
 	}
-	//client.users.get("208439694508163072").send(pmMsg);
+	
+	var users = raidCh.members.array();
+	for(var i=0;i<users.length;i++) {
+		users[i].user.send(pmMsg)
+		.then(msg => {
+			cr.signupMsgs.push(msg.id);
+			io.writeFile(raidFile, raids);
+		});
+	}
 	
 	return "Signup sent for Raid ID " + cr.raidId + " Date: " + dh.toDate(new Date(cr.raidDate)) + " Name: " + cr.raidName + "!";
 }
