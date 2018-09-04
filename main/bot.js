@@ -23,26 +23,41 @@ client.on("ready", () => {
 	pchk.checkPopulation(client);
 	// Initialize trickster manager
 	trck.initialize(client);
+	
+	var ch = client.guilds.find(function(e){return e.name=="Carnage";}).channels.find(function(e){return e.name=="bot-test-channel";});
+	var allMsgs;
+	getAllMessages(ch, (msgs, count) => {
+		var cbot = 0;
+		for(var i=0;i<count;i++) {
+			if(msgs[i].author.username=="C Bot") {
+				cbot +=1;
+			}
+		}
+		console.log(cbot+"/"+count);
+	});
+	
 });
 
-/*function getAllMessages(pch) {
+function getAllMessages(pch, rMsgs) {
 	pch.fetchMessages({limit: 1})
 		.then(function(msgs){
 			var lastId = msgs.lastKey();
 			if(lastId) {
 				var count = 0;
+				var allMsgs = [];
 				(function getAllMessagesLoop(ch, id) {
 					ch.fetchMessages({limit: 100, before: id})
 					.then(function(msgs){
 						lastId = msgs.lastKey();
 						count += msgs.size;
+						allMsgs = allMsgs.concat(msgs.array());
 					})
-					.then(()=>{if(lastId) {console.log(`${lastId} => ${count}`); getAllMessagesLoop(ch, lastId);} else {console.log(`${count}`);}})
+					.then(()=>{if(lastId) {getAllMessagesLoop(ch, lastId);} else {rMsgs(allMsgs, count);}})
 					.catch(console.error);
 				})(pch, lastId);
 			}
 		})
-}*/
+}
 
 client.on("error", (err) => {
   console.error(err);

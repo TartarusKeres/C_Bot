@@ -28,154 +28,191 @@ exports.parseCommand = function(funcArgs) {
 	var user = message.author;
 	var isAdmin = admin.includes(user.id);
 	var response = "";
-	switch(args[0].toUpperCase()) {
-		case "CREATE":
-			if(args.length==7) {
-				if(!isNaN(args[3]) && !isNaN(args[4]) && !isNaN(args[5]) && !isNaN(args[6])) {
-					response = createRaid(args[1], args[2], parseInt(args[3]), parseInt(args[4]), parseInt(args[5]), parseInt(args[6]));
-				} else {
-					response = 
-						"<NumTank>, <NumHeal>, <NumDPS>, and <NumReserve> must be numbers!" +
-						"\nSyntax for create is: $raid create <mm-dd-yyyy> <name> <NumTank> <NumHeal> <NumDPS> <NumReserve>";
-				}
-			} else {
-				response = "Syntax for create is: $raid create <mm-dd-yyyy> <name> <NumTank> <NumHeal> <NumDPS> <NumReserve>";
-			}
-			break;
-		case "DELETE":
-			if(args.length==2) {
-				if(!isNaN(args[1])) {
-					response = deleteRaid(parseInt(args[1]));
-				} else {
-					response = 
-						"<Raid ID> must be a number!" +
-						"\nSyntax for delete is: $raid delete <Raid ID>";
-				}
-			} else {
-				response = "Syntax for delete is: $raid delete <Raid ID>";
-			}
-			break;
-		case "ADD":
-			if(args.length==4) {
-				if(!isNaN(args[1])) {
-					response = addRaid(parseInt(args[1]), u(message.mentions.members.first().user.id), args[3]);
-				} else {
-					response = 
-						"<Raid ID> must be a number!" +
-						"\nSyntax for add is: $raid add <Raid ID> <@user> <Tank|Heal|DPS|Reserve>";
-				}
-			} else {
-				response = "Syntax for add is: $raid add <Raid ID> <@user> <Tank|Heal|DPS|Reserve>";
-			}
-			break;
-		case "REMOVE":
-			if(args.length==3) {
-				if(!isNaN(args[1])) {
-					response = removeRaid(parseInt(args[1]), u(message.mentions.members.first().user.id), args[3]);
-				} else {
-					response = 
-						"<Raid ID> must be a number!" +
-						"\nSyntax for remove is: $raid remove <Raid ID> <@user>";
-				}
-			} else {
-				response = "Syntax for remove is: $raid remove <Raid ID> <@user>";
-			}
-			break;
-		case "JOIN":
-			if(args.length==3) {
-				if(!isNaN(args[1])) {
-					response = joinRaid(parseInt(args[1]), u(user.id), args[2]);
-				} else {
-					response = 
-						"<Raid ID> must be a number!" +
-						"\nSyntax for join is: $raid join <Raid ID> <Tank|Heal|DPS|Reserve>";
-				}
-			} else {
-				response = "Syntax for join is: $raid join <Raid ID> <Tank|Heal|DPS|Reserve>";
-			}
-			break;
-		case "LEAVE":
-			if(args.length==2) {
-				if(!isNaN(args[1])) {
-					response = leaveRaid(parseInt(args[1]), u(user.id));
-				} else {
-					response = 
-						"<Raid ID> must be a number!" +
-						"\nSyntax for leave is: $raid leave <Raid ID>";
-				}
-			} else {
-				response = "Syntax for leave is: $raid leave <Raid ID>";
-			}
-			break;
-		case "LIST":
-			if(args.length==1) {
-				response = listRaids();
-			} else {
-				response = "Syntax for list is: $raid list";
-			}
-			break;
-		case "SHOW":
-			if(args.length==2) {
-				if(!isNaN(args[1])) {
-					response = showRaid(parseInt(args[1]));
-				} else {
-					response = 
-						"<Raid ID> must be a number!" +
-						"\nSyntax for show is: $raid show <Raid ID>";
-				}
-			} else {
-				response = "Syntax for show is: $raid show <Raid ID>";
-			}
-			break;
-		case "REMINDER":
-			if(isAdmin) {
-				if(args.length==2) {
-					if(!isNaN(args[1])) {
-						response = raidReminder(parseInt(args[1]));
+	if(args[0]!==undefined) {
+		switch(args[0].toUpperCase()) {
+			case "CREATE":
+				if(isAdmin) {
+					if(args.length==7) {
+						if(!isNaN(args[3]) && !isNaN(args[4]) && !isNaN(args[5]) && !isNaN(args[6])) {
+							response = createRaid(args[1], args[2], parseInt(args[3]), parseInt(args[4]), parseInt(args[5]), parseInt(args[6]));
+						} else {
+							response = 
+								"<NumTank>, <NumHeal>, <NumDPS>, and <NumReserve> must be numbers!" +
+								"\nSyntax for create is: $raid create <mm-dd-yyyy> <name> <NumTank> <NumHeal> <NumDPS> <NumReserve>";
+						}
 					} else {
-						response = 
-							"<Raid ID> must be a number!" +
-							"\nSyntax for reminder is: $raid reminder <Raid ID>";
+						response = "Syntax for create is: $raid create <mm-dd-yyyy> <name> <NumTank> <NumHeal> <NumDPS> <NumReserve>";
 					}
 				} else {
-					response = "Syntax for reminder is: $raid reminder <Raid ID>";
+					response = "You must be an admin to use this command!";
 				}
-			} else {
-				response = "You must be an admin to use this command!";
-			}
-			break;
-		case "SIGNUP":
-			if(isAdmin) {
+				break;
+			case "DELETE":
+				if(isAdmin) {
+					if(args.length==2) {
+						if(!isNaN(args[1])) {
+							response = deleteRaid(parseInt(args[1]));
+						} else {
+							response = 
+								"<Raid ID> must be a number!" +
+								"\nSyntax for delete is: $raid delete <Raid ID>";
+						}
+					} else {
+						response = "Syntax for delete is: $raid delete <Raid ID>";
+					}
+				} else {
+					response = "You must be an admin to use this command!";
+				}
+				break;
+			case "ADD":
+				if(isAdmin) {
+					if(args.length==4) {
+						if(!isNaN(args[1])) {
+							response = addRaid(parseInt(args[1]), u(message.mentions.members.first().user.id), args[3]);
+						} else {
+							response = 
+								"<Raid ID> must be a number!" +
+								"\nSyntax for add is: $raid add <Raid ID> <@user> <Tank|Heal|DPS|Reserve>";
+						}
+					} else {
+						response = "Syntax for add is: $raid add <Raid ID> <@user> <Tank|Heal|DPS|Reserve>";
+					}
+				} else {
+					response = "You must be an admin to use this command!";
+				}
+				break;
+			case "REMOVE":
+				if(isAdmin) {
+					if(args.length==3) {
+						if(!isNaN(args[1])) {
+							response = removeRaid(parseInt(args[1]), u(message.mentions.members.first().user.id), args[3]);
+						} else {
+							response = 
+								"<Raid ID> must be a number!" +
+								"\nSyntax for remove is: $raid remove <Raid ID> <@user>";
+						}
+					} else {
+						response = "Syntax for remove is: $raid remove <Raid ID> <@user>";
+					}
+				} else {
+					response = "You must be an admin to use this command!";
+				}
+				break;
+			case "JOIN":
 				if(args.length==3) {
 					if(!isNaN(args[1])) {
-						response = raidSignup(parseInt(args[1]), message, args[2]);
+						response = joinRaid(parseInt(args[1]), u(user.id), args[2]);
 					} else {
 						response = 
 							"<Raid ID> must be a number!" +
-							"\nSyntax for signup is: $raid signup <Raid ID> <normal|hard>";
+							"\nSyntax for join is: $raid join <Raid ID> <Tank|Heal|DPS|Reserve>";
 					}
 				} else {
-					response = "Syntax for signup is: $raid signup <Raid ID> <normal|hard>";
+					response = "Syntax for join is: $raid join <Raid ID> <Tank|Heal|DPS|Reserve>";
 				}
-			} else {
-				response = "You must be an admin to use this command!";
-			}
-			break;
-		default:
-			response = "```Please choose a raid command from the list below: " +
-			"\n\n$raid create <name> <NumTank> <NumHeal> <NumDPS> <NumReserve>" +
-			"\n$raid delete <Raid ID>" +
-			"\n$raid add <Raid ID> <@user> <Tank|Heal|DPS>" +
-			"\n$raid remove <Raid ID> <@user>" +
+				break;
+			case "LEAVE":
+				if(args.length==2) {
+					if(!isNaN(args[1])) {
+						response = leaveRaid(parseInt(args[1]), u(user.id));
+					} else {
+						response = 
+							"<Raid ID> must be a number!" +
+							"\nSyntax for leave is: $raid leave <Raid ID>";
+					}
+				} else {
+					response = "Syntax for leave is: $raid leave <Raid ID>";
+				}
+				break;
+			case "LIST":
+				if(args.length==1) {
+					response = listRaids();
+				} else {
+					response = "Syntax for list is: $raid list";
+				}
+				break;
+			case "SHOW":
+				if(args.length==2) {
+					if(!isNaN(args[1])) {
+						response = showRaid(parseInt(args[1]));
+					} else {
+						response = 
+							"<Raid ID> must be a number!" +
+							"\nSyntax for show is: $raid show <Raid ID>";
+					}
+				} else {
+					response = "Syntax for show is: $raid show <Raid ID>";
+				}
+				break;
+			case "REMINDER":
+				if(isAdmin) {
+					if(args.length==2) {
+						if(!isNaN(args[1])) {
+							response = raidReminder(parseInt(args[1]));
+						} else {
+							response = 
+								"<Raid ID> must be a number!" +
+								"\nSyntax for reminder is: $raid reminder <Raid ID>";
+						}
+					} else {
+						response = "Syntax for reminder is: $raid reminder <Raid ID>";
+					}
+				} else {
+					response = "You must be an admin to use this command!";
+				}
+				break;
+			case "SIGNUP":
+				if(isAdmin) {
+					if(args.length==3) {
+						if(!isNaN(args[1])) {
+							response = raidSignup(parseInt(args[1]), message, args[2]);
+						} else {
+							response = 
+								"<Raid ID> must be a number!" +
+								"\nSyntax for signup is: $raid signup <Raid ID> <normal|hard>";
+						}
+					} else {
+						response = "Syntax for signup is: $raid signup <Raid ID> <normal|hard>";
+					}
+				} else {
+					response = "You must be an admin to use this command!";
+				}
+				break;
+			default:
+				response = "```Please choose a raid command from the list below: " +
+				"\n\nALL PLAYERS:" +
+				"\n$raid join <Raid ID> <Tank|Heal|DPS>" +
+				"\n$raid leave <Raid ID>" +
+				"\n$raid list" +
+				"\n$raid show <Raid ID>" +
+				"\n\nADMIN ONLY:" +
+				"\n$raid create <name> <NumTank> <NumHeal> <NumDPS> <NumReserve>" +
+				"\n$raid delete <Raid ID>" +
+				"\n$raid add <Raid ID> <@user> <Tank|Heal|DPS>" +
+				"\n$raid remove <Raid ID> <@user>" +
+				"\n$raid reminder <Raid ID>" +
+				"\n$raid signup" +
+				"```";
+		}
+		message.channel.send(response);
+	} else {
+		message.channel.send(
+			"```Please choose a raid command from the list below: " +
+			"\n\nALL PLAYERS:" +
 			"\n$raid join <Raid ID> <Tank|Heal|DPS>" +
 			"\n$raid leave <Raid ID>" +
 			"\n$raid list" +
 			"\n$raid show <Raid ID>" +
+			"\n\nADMIN ONLY:" +
+			"\n$raid create <name> <NumTank> <NumHeal> <NumDPS> <NumReserve>" +
+			"\n$raid delete <Raid ID>" +
+			"\n$raid add <Raid ID> <@user> <Tank|Heal|DPS>" +
+			"\n$raid remove <Raid ID> <@user>" +
 			"\n$raid reminder <Raid ID>" +
 			"\n$raid signup" +
-			"```";
+			"```"
+		);
 	}
-	message.channel.send(response);
 }
 
 exports.parseResponse = function(user, emoji, message) {
@@ -457,7 +494,7 @@ function raidSignup(id, message, raidType) {
 	
 	var raidCh;
 	if(raidType.toUpperCase()=="NORMAL") {
-		raidCh = client.guilds.find(function(e){return e.name=="Carnage";}).channels.find(function(e){return e.name=="carnage";});
+		raidCh = client.guilds.find(function(e){return e.name=="Carnage";}).channels.find(function(e){return e.name=="carnage-general";});
 	} else if(raidType.toUpperCase()=="HARD") {
 		raidCh = client.guilds.find(function(e){return e.name=="Carnage";}).channels.find(function(e){return e.name=="hard-raids";});
 	} else if(raidType.toUpperCase()=="TEST") {
@@ -475,11 +512,13 @@ function raidSignup(id, message, raidType) {
 	
 	var users = raidCh.members.array();
 	for(var i=0;i<users.length;i++) {
-		users[i].user.send(pmMsg)
-		.then(msg => {
-			cr.signupMsgs.push(msg.id);
-			io.writeFile(raidFile, raids);
-		});
+		if(!users[i].user.bot) {
+			users[i].user.send(pmMsg)
+			.then(msg => {
+				cr.signupMsgs.push(msg.id);
+				io.writeFile(raidFile, raids);
+			});
+		}
 	}
 	
 	return "Signup sent for Raid ID " + cr.raidId + " Date: " + dh.toDate(new Date(cr.raidDate)) + " Name: " + cr.raidName + "!";

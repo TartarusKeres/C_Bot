@@ -23,6 +23,6 @@ function updateTricksterField() {
 		tricksterSeed.setHours(tricksterSeed.getHours()+10);
 	}
 	nextTrickster = tricksterSeed;
-	client.guilds.find(function(e){return e.name=="Carnage";}).channels.find(function(e){return e.id=="481830068973338624";}).setName("trickster in " + dh.toHours(nextTrickster));
+	client.guilds.find(function(e){return e.name=="Carnage";}).channels.find(function(e){return e.id=="486411294476599296";}).setName("trickster in " + dh.toHours(nextTrickster));
 	setTimeout(updateTricksterField, 60000);
 }
